@@ -29,7 +29,7 @@ Currently, the start points supported are
 
     map filter foldl foldr for-each andmap ormap
 
-but their arguments can only be arbitrary combinations of *map*, *filter* and *range* forms.
+but their arguments can only be arbitrary combinations of *map*, *filter* and *range* forms, and other forms will be treated as normal lists and not be converted.
 
 See more examples on tests.
 
