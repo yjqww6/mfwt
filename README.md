@@ -34,5 +34,5 @@ but their arguments can only be arbitrary combinations of *map*, *filter* and *r
 See more examples on tests.
 
 ## Notes
-* The converted forms will not check whethen all input lists have same length. It will stop recursion when encountering any end of inputs.
+* The converted forms will not check whether all input lists have same lengths. It will stop recursion when encountering any end of inputs.
 * If the procedures passed to *map* & *filter* have **side effects**, it may not behave the same as the original.
