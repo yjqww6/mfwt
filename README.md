@@ -10,15 +10,15 @@ For example,
 
 will be expanded to forms like
 
-    (let ((p1909 add1) (l1913 '(1 2 3)) (p1912 odd?))
-      (let all-loop ((s1914 l1913))
-        (let failer1911 ((s1914 s1914))
-          (if (null? s1914)
+    (let ((p1 add1) (l3 '(1 2 3)) (p7 odd?))
+      (let all-loop ((s4 l3))
+        (let failer6 ((s4 s4))
+          (if (null? s4)
               '()
-              (let ((me1915 (car s1914)))
-                (if (p1912 me1915)
-                    (cons (p1909 me1915) (all-loop (cdr s1914)))
-                    (failer1911 (cdr s1914))))))))
+              (let ((me5 (car s4)))
+                (if (p7 me5) 
+                    (cons (p1 me5) (all-loop (cdr s4)))
+                    (failer6 (cdr s4))))))))
 
 which eliminates the temporary lists.
 
