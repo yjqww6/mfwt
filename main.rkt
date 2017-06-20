@@ -82,14 +82,6 @@
          (match (third slot)
            [(Source _ _ _ _ cdr) cdr]))]))
 
-  (define ((src-null? src) id)
-    (cond
-      [(assq id src)
-       =>
-       (λ (slot)
-         (match (third slot)
-           [(Source _ _ null? _ _) null?]))]))
-
   (define (generate node src kt kf knull)
     (match node
       [(Filter p in dep* failer node)
@@ -97,11 +89,9 @@
            #,(generate
               node src
               (λ ()
-                #`(if (or #,@(map (src-null? src) dep*))
-                      #,knull
-                      (if (#,p #,in)
-                          #,(kt)
-                          (#,failer #,@(map (step src) dep*)))))
+                #`(if (#,p #,in)
+                      #,(kt)
+                      (#,failer #,@(map (step src) dep*))))
               kf knull))]
       [(Map f in* out dep* children)
        (let loop ([children children])
