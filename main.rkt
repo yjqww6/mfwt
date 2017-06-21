@@ -67,14 +67,9 @@
 
   
   (define ((step src) id)
-    (cond
-      [(assq id src)
-       =>
-       (λ (slot)
-         (match (third slot)
-           [(Source _ _ _ _ cdr) cdr]))]))
+    (Source-cdr (third (assq id src))))
 
-  (define (generate node src kt kf knull)
+  (define (generate node src ctx nil)
     (match node
       [(Filter p in dep* failer node)
        #`(let #,failer #,(map (λ (x) #`(#,x #,x)) dep*)
@@ -82,22 +77,20 @@
               node src
               (λ ()
                 #`(if (#,p #,in)
-                      #,(kt)
-                      (#,failer #,@(map (step src) dep*))))
-              kf knull))]
+                      #,(ctx)
+                      (#,failer #,@(map (step src) dep*)))) nil))]
       [(Map f in* out dep* children)
        (let loop ([children children])
          (if (null? children)
-             #`(let ([#,out (#,f  #,@in*)]) #,(kt))
+             #`(let ([#,out (#,f  #,@in*)]) #,(ctx))
              (generate (car children) src
-                       (λ () (loop (cdr children)))
-                       kf knull)))]
+                       (λ () (loop (cdr children))) nil)))]
       [(Source _ me null? car _)
        #`(if #,null?
-             #,knull
-             (let ([#,me #,car]) #,(kt)))]))
+             #,nil
+             (let ([#,me #,car]) #,(ctx)))]))
 
-  (define (sink src children dep* d comp knull)
+  (define (sink src children dep* d comp nil)
     (define/with-syntax ((l . e) ...) d)
     (match-let ([(list (list s i _) ...) src])
       (define/with-syntax (ss ...) s)
@@ -110,8 +103,7 @@
                     (generate (car children)
                               src
                               (λ () (cloop (cdr children)))
-                              (const #`(all-loop #,@(map (step src) dep*)))
-                              knull)))))))
+                              nil)))))))
   
   (define (trans stx)
     (syntax-case stx (map filter for-each foldl foldr andmap ormap)
